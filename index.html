@@ -1,21 +1,73 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mockup Landing</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MadeByMeier — Landing</title>
+
+  <!-- Drippy/Gothic vibe: choose one (Rubik Wet Paint = drippy, UnifrakturMaguntia = gothic). -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik+Wet+Paint&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./assets/mbm-landing.css" />
 </head>
 <body>
-  <div id="container">
-    <canvas id="three-canvas"></canvas>
-    <div id="ui-overlay">
-      <button id="back-button" class="hidden">&larr; Back</button>
-      <button id="buy-button" class="hidden">Buy this item</button>
-    </div>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/three@0.156.0/build/three.min.js"></script>
-  <script src="main.js"></script>
+  <main class="mbm-landing" aria-labelledby="site-title">
+    <!-- Wordmark (large, black, drippy/gothic) -->
+    <h1 id="site-title" class="mbm-wordmark" aria-label="MadeByMeier">
+      <!-- If you later replace with an SVG logo, keep role and aria-label -->
+      <span class="mbm-wordmark__drip">MadeByMeier</span>
+    </h1>
+
+    <!-- Stage: skull center + orbiting product “buttons” (images only) -->
+    <section class="orbit-section" aria-label="MadeByMeier product shortcuts" role="group">
+      <div class="orbit-shell">
+        <div class="orbit-stage" id="orbit-stage" aria-live="polite">
+          <!-- Center skull -->
+          <div class="orbit-center" aria-hidden="true">
+            <img src="./assets/skull.svg" alt="" class="skull" decoding="async" />
+          </div>
+
+          <!-- Orbiting clickable images (no text on the buttons) -->
+          <!-- Product #1: Belt -->
+          <a class="orbit-btn orbit-btn--middle"
+             href="/products/belt"
+             data-ring="middle"
+             data-index="0"
+             data-count="2"
+             aria-label="Belt — View product">
+            <img src="./assets/product-belt.svg" alt="Belt — View product" decoding="async" />
+          </a>
+
+          <!-- Product #2: Backpack -->
+          <a class="orbit-btn orbit-btn--outer"
+             href="/products/backpack"
+             data-ring="outer"
+             data-index="1"
+             data-count="2"
+             aria-label="Backpack — View product">
+            <img src="./assets/product-backpack.svg" alt="Backpack — View product" decoding="async" />
+          </a>
+
+          <!-- Decorative rings (hidden on reduce-motion) -->
+          <div class="orbit-ring orbit-ring--outer" data-ring="outer" aria-hidden="true"></div>
+          <div class="orbit-ring orbit-ring--middle" data-ring="middle" aria-hidden="true"></div>
+          <div class="orbit-ring orbit-ring--inner" data-ring="inner" aria-hidden="true"></div>
+        </div>
+
+        <noscript>
+          <div class="orbit-noscript">
+            <ul>
+              <li><a href="/products/belt">Belt — View product</a></li>
+              <li><a href="/products/backpack">Backpack — View product</a></li>
+            </ul>
+          </div>
+        </noscript>
+      </div>
+    </section>
+  </main>
+
+  <script defer src="./assets/mbm-landing.js"></script>
 </body>
 </html>
