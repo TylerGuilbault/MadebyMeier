@@ -1,0 +1,161 @@
+/* ----------------------------------------------------------
+   MadeByMeier • Landing styles (creamy light UI, black text)
+   ---------------------------------------------------------- */
+
+:root{
+  /* Creamy / warm light palette (never dark backgrounds) */
+  --mbm-bg: #f7f4ef;            /* page background (creamy) */
+  --mbm-surface: #fbf9f5;       /* lighter panel */
+  --mbm-ink: #111111;           /* all text is black */
+  --mbm-line: rgba(0,0,0,.08);  /* subtle borders */
+  --mbm-ring: rgba(0,0,0,.16);  /* orbit guides */
+
+  /* Motion / layout */
+  --stage-max: 780px;
+  --wordmark-top-pad: clamp(16px, 6vh, 56px);
+  --shell-pad: clamp(16px, 4vw, 40px);
+}
+
+/* Page base */
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--mbm-bg);
+  color: var(--mbm-ink);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+/* Main layout */
+.mbm-landing{
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  align-items: start;
+}
+
+/* Wordmark */
+.mbm-wordmark{
+  margin: var(--wordmark-top-pad) 0 0;
+  text-align: center;
+  line-height: 1;
+}
+.mbm-wordmark__drip{
+  /* Choose which you prefer visually; first is drippy, second is gothic */
+  font-family: 'Rubik Wet Paint', cursive, 'UnifrakturMaguntia', serif;
+  font-size: clamp(38px, 9vw, 110px);
+  color: var(--mbm-ink);
+  letter-spacing: 0.02em;
+}
+
+/* Orbit area */
+.orbit-section{
+  display: grid;
+  place-items: center;
+  padding: 0 0 clamp(20px, 6vh, 40px);
+}
+.orbit-shell{
+  width: min(1200px, 94vw);
+  padding: var(--shell-pad);
+  background: var(--mbm-surface);
+  border: 1px solid var(--mbm-line);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,.06);
+}
+
+/* The circular stage (no dark fills) */
+.orbit-stage{
+  position: relative;
+  width: min(90vw, var(--stage-max));
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, #ffffff 0%, #faf7f2 55%, #f3efe8 100%);
+  overflow: visible;
+  transform-style: preserve-3d;
+  touch-action: manipulation;
+}
+
+/* Center skull */
+.orbit-center{
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+.orbit-center .skull{
+  width: clamp(68px, 14vw, 140px);
+  height: auto;
+  filter: drop-shadow(0 3px 8px rgba(0,0,0,.12));
+}
+
+/* Guide rings */
+.orbit-ring{
+  position: absolute; inset: 0; margin: auto;
+  border-radius: 50%;
+  pointer-events: none;
+  border: 1px dashed var(--mbm-ring);
+}
+.orbit-ring--outer { width: 100%; height: 100%; }
+.orbit-ring--middle{ width: 72%; height: 72%; }
+.orbit-ring--inner { width: 46%; height: 46%; }
+
+/* Orbit buttons — image-only chips with creamy backplate (never dark) */
+.orbit-btn{
+  position: absolute;
+  transform: translate(-50%, -50%) translateZ(0);
+  display: inline-flex; align-items: center; justify-content: center;
+  background: #ffffffcc; /* light + slightly translucent */
+  border: 1px solid var(--mbm-line);
+  border-radius: 9999px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.08);
+  padding: 10px 12px;
+  min-width: 44px; min-height: 44px; /* touch target */
+  text-decoration: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  will-change: transform;
+}
+.orbit-btn img{
+  display: block;
+  width: clamp(44px, 10vw, 92px);
+  height: auto;
+}
+.orbit-btn:hover{ box-shadow: 0 10px 28px rgba(0,0,0,.12); }
+.orbit-btn:focus-visible{ outline: 2px solid var(--mbm-ink); outline-offset: 2px; }
+
+/* Subtle float (CSS-only), layered on top of JS orbiting */
+@keyframes floatY {
+  0% { transform: translate(-50%, -50%) translateY(-6px); }
+  50%{ transform: translate(-50%, -50%) translateY( 6px); }
+  100%{transform: translate(-50%, -50%) translateY(-6px); }
+}
+.orbit-btn{ animation: floatY 4.4s ease-in-out infinite; }
+.orbit-btn:nth-of-type(2){ animation-duration: 5.2s; animation-delay: .2s; }
+
+/* Reduced motion: disable orbit, present static links */
+@media (prefers-reduced-motion: reduce){
+  .orbit-ring{ display: none; }
+  .orbit-stage{
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 14px;
+    aspect-ratio: auto;
+    background: var(--mbm-surface);
+    border: 1px dashed var(--mbm-line);
+    padding: 20px;
+  }
+  .orbit-btn{
+    position: static;
+    transform: none !important;
+    animation: none !important;
+  }
+}
+
+/* Small screens */
+@media (max-width: 520px){
+  :root{ --stage-max: 640px; }
+  .orbit-shell{ padding: clamp(10px, 3vw, 24px); }
+  .mbm-wordmark__drip{ font-size: clamp(36px, 12vw, 88px); }
+}
