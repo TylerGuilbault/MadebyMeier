@@ -5,22 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MadeByMeier — Landing</title>
 
-  <!-- Drippy/Gothic vibe: choose one (Rubik Wet Paint = drippy, UnifrakturMaguntia = gothic). -->
+  <!-- Drippy/Gothic vibe; you can swap fonts later without changing markup -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rubik+Wet+Paint&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="./assets/mbm-landing.css" />
 </head>
 <body>
-
   <main class="mbm-landing" aria-labelledby="site-title">
-    <!-- Wordmark (large, black, drippy/gothic) -->
+    <!-- Wordmark (large, black, drippy/gothic), no header/nav -->
     <h1 id="site-title" class="mbm-wordmark" aria-label="MadeByMeier">
-      <!-- If you later replace with an SVG logo, keep role and aria-label -->
       <span class="mbm-wordmark__drip">MadeByMeier</span>
     </h1>
 
-    <!-- Stage: skull center + orbiting product “buttons” (images only) -->
+    <!-- Stage: skull center + orbiting product images (clickable buttons) -->
     <section class="orbit-section" aria-label="MadeByMeier product shortcuts" role="group">
       <div class="orbit-shell">
         <div class="orbit-stage" id="orbit-stage" aria-live="polite">
@@ -50,7 +48,7 @@
             <img src="./assets/product-backpack.svg" alt="Backpack — View product" decoding="async" />
           </a>
 
-          <!-- Decorative rings (hidden on reduce-motion) -->
+          <!-- Decorative rings (hidden on reduced-motion) -->
           <div class="orbit-ring orbit-ring--outer" data-ring="outer" aria-hidden="true"></div>
           <div class="orbit-ring orbit-ring--middle" data-ring="middle" aria-hidden="true"></div>
           <div class="orbit-ring orbit-ring--inner" data-ring="inner" aria-hidden="true"></div>
