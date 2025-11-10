@@ -1,22 +1,22 @@
 /* ----------------------------------------------------------
    MadeByMeier • Landing styles (creamy light UI, black text)
+   Mobile-first, Shopify-safe (no dark fills, text always black)
    ---------------------------------------------------------- */
 
 :root{
-  /* Creamy / warm light palette (never dark backgrounds) */
+  /* Creamy / warm light palette */
   --mbm-bg: #f7f4ef;            /* page background (creamy) */
   --mbm-surface: #fbf9f5;       /* lighter panel */
   --mbm-ink: #111111;           /* all text is black */
   --mbm-line: rgba(0,0,0,.08);  /* subtle borders */
   --mbm-ring: rgba(0,0,0,.16);  /* orbit guides */
 
-  /* Motion / layout */
+  /* Layout */
   --stage-max: 780px;
   --wordmark-top-pad: clamp(16px, 6vh, 56px);
   --shell-pad: clamp(16px, 4vw, 40px);
 }
 
-/* Page base */
 html, body { height: 100%; }
 body {
   margin: 0;
@@ -40,14 +40,14 @@ body {
   line-height: 1;
 }
 .mbm-wordmark__drip{
-  /* Choose which you prefer visually; first is drippy, second is gothic */
+  /* Drippy first, gothic fallback; adjust order if you prefer gothic primary */
   font-family: 'Rubik Wet Paint', cursive, 'UnifrakturMaguntia', serif;
   font-size: clamp(38px, 9vw, 110px);
   color: var(--mbm-ink);
   letter-spacing: 0.02em;
 }
 
-/* Orbit area */
+/* Orbit area container */
 .orbit-section{
   display: grid;
   place-items: center;
@@ -103,13 +103,15 @@ body {
 /* Orbit buttons — image-only chips with creamy backplate (never dark) */
 .orbit-btn{
   position: absolute;
+  top: 0;                     /* anchor transform to stage origin */
+  left: 0;
   transform: translate(-50%, -50%) translateZ(0);
   display: inline-flex; align-items: center; justify-content: center;
-  background: #ffffffcc; /* light + slightly translucent */
+  background: #ffffffcc;      /* light + slightly translucent */
   border: 1px solid var(--mbm-line);
   border-radius: 9999px;
   box-shadow: 0 6px 16px rgba(0,0,0,.08);
-  padding: 10px 12px;
+  padding: 12px 14px;
   min-width: 44px; min-height: 44px; /* touch target */
   text-decoration: none;
   user-select: none;
@@ -118,20 +120,14 @@ body {
 }
 .orbit-btn img{
   display: block;
-  width: clamp(44px, 10vw, 92px);
+  width: clamp(72px, 14vw, 140px); /* larger than before */
   height: auto;
 }
 .orbit-btn:hover{ box-shadow: 0 10px 28px rgba(0,0,0,.12); }
 .orbit-btn:focus-visible{ outline: 2px solid var(--mbm-ink); outline-offset: 2px; }
 
-/* Subtle float (CSS-only), layered on top of JS orbiting */
-@keyframes floatY {
-  0% { transform: translate(-50%, -50%) translateY(-6px); }
-  50%{ transform: translate(-50%, -50%) translateY( 6px); }
-  100%{transform: translate(-50%, -50%) translateY(-6px); }
-}
-.orbit-btn{ animation: floatY 4.4s ease-in-out infinite; }
-.orbit-btn:nth-of-type(2){ animation-duration: 5.2s; animation-delay: .2s; }
+/* IMPORTANT: no CSS transform animations here.
+   JS owns the transform so orbit + dragging work reliably. */
 
 /* Reduced motion: disable orbit, present static links */
 @media (prefers-reduced-motion: reduce){
@@ -149,7 +145,6 @@ body {
   .orbit-btn{
     position: static;
     transform: none !important;
-    animation: none !important;
   }
 }
 
