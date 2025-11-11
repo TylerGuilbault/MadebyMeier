@@ -1,143 +1,113 @@
 /* ----------------------------------------------------------
-   MadeByMeier • Landing styles (creamy but darker, text black)
-   - More spacing below header
-   - No color-separated box
-   - No guide rings
-   - Mobile-first, Shopify-safe
+   MadeByMeier v8 • minimal orbit look
+   - no chip backgrounds
+   - no labels
+   - darker creamy background
    ---------------------------------------------------------- */
 
 :root{
-  /* Darker, still warm/creamy background (not harsh) */
-  --mbm-bg: #e3dbcf;            /* darker creamy */
-  --mbm-surface: #e3dbcf;       /* same as bg → no separation */
-  --mbm-ink: #111111;           /* all text is black */
-  --mbm-line: rgba(0,0,0,.08);  /* subtle borders if ever needed */
-
-  /* Layout */
-  --stage-max: 780px;
-  --wordmark-top-pad: clamp(18px, 6vh, 56px);
-  --wordmark-bottom-gap: clamp(28px, 10vh, 110px); /* EXTRA spacing you asked for */
-  --shell-pad: clamp(4px, 2.6vw, 20px);
+  --mbm-bg:#e3dbcf;
+  --mbm-ink:#111;
+  --stage-max:780px;
+  --wordmark-top-pad:clamp(20px,7vh,64px);
+  --wordmark-bottom-gap:clamp(30px,10vh,120px);
 }
 
-html, body { height: 100%; }
-body {
-  margin: 0;
-  background: var(--mbm-bg);
-  color: var(--mbm-ink);
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+html,body{height:100%}
+body{
+  margin:0;
+  background:var(--mbm-bg);
+  color:var(--mbm-ink);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
 }
 
-/* Main layout */
 .mbm-landing{
-  min-height: 100dvh;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  align-items: start;
+  min-height:100dvh;
+  display:grid;
+  grid-template-rows:auto 1fr;
 }
 
-/* Wordmark */
 .mbm-wordmark{
-  margin: var(--wordmark-top-pad) 0 var(--wordmark-bottom-gap);
-  text-align: center;
-  line-height: 1;
+  margin:var(--wordmark-top-pad) 0 var(--wordmark-bottom-gap);
+  text-align:center;
 }
 .mbm-wordmark-svg{
-  width: min(94vw, 1400px);
-  height: auto;
-  display: inline-block;
+  width:min(94vw,1400px);
+  height:auto;
+}
+.mbm-wordmark-text{
+  font-family:'UnifrakturMaguntia',serif;
+  font-weight:400;
+  fill:url(#inkGrad);
 }
 
-/* Orbit area container */
 .orbit-section{
-  display: grid;
-  place-items: center;
-  padding: 0 0 clamp(20px, 6vh, 40px);
+  display:grid;
+  place-items:center;
 }
-/* orbit-shell keeps padding only; no background, border, shadow */
 .orbit-shell{
-  width: min(1200px, 96vw);
-  padding: var(--shell-pad);
-  background: transparent;
-  border: none;
-  box-shadow: none;
+  width:min(1200px,96vw);
+  background:transparent;
 }
-
-/* The circular stage (subtle, same tone) */
 .orbit-stage{
-  position: relative;
-  width: min(94vw, var(--stage-max));
-  aspect-ratio: 1 / 1;
-  margin: 0 auto;
-  border-radius: 50%;
-  /* Slight tonal gradient, but same family color */
-  background: radial-gradient(ellipse at center, #e9e2d7 0%, #e5ddcf 55%, #e0d8cb 100%);
-  overflow: visible;
-  transform-style: preserve-3d;
-  touch-action: none; /* JS drag owns gestures */
+  position:relative;
+  width:min(94vw,var(--stage-max));
+  aspect-ratio:1/1;
+  margin:0 auto;
+  border-radius:50%;
+  background:radial-gradient(ellipse at center,#ddd5ca 0%,#d9d1c6 100%);
+  overflow:visible;
+  transform-style:preserve-3d;
+  touch-action:none;
 }
 
 /* Center skull */
 .orbit-center{
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  pointer-events: none;
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  pointer-events:none;
 }
 .orbit-center .skull{
-  width: clamp(72px, 16vw, 150px);
-  height: auto;
-  filter: drop-shadow(0 3px 8px rgba(0,0,0,.12));
+  width:clamp(72px,16vw,150px);
+  height:auto;
+  filter:drop-shadow(0 3px 8px rgba(0,0,0,.12));
 }
 
-/* Guide rings REMOVED */
-
-/* Orbit buttons — image-only chips with creamy backplate (never dark) */
-.orbit-btn{
-  position: absolute;
-  top: 0; left: 0;               /* anchor transform to stage origin */
-  transform: translate(-50%, -50%) translateZ(0);
-  display: inline-flex; align-items: center; justify-content: center;
-  background: #ffffffcc;         /* light + slightly translucent */
-  border: 1px solid var(--mbm-line);
-  border-radius: 9999px;
-  box-shadow: 0 6px 16px rgba(0,0,0,.10);
-  padding: 14px 16px;
-  min-width: 48px; min-height: 48px; /* tap target */
-  text-decoration: none;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  will-change: transform;
+/* Orbiting items (no background circle) */
+.orbit-item{
+  position:absolute;
+  top:0;left:0;
+  transform:translate(-50%,-50%) translateZ(0);
+  display:block;
+  border:none;
+  background:none;
+  box-shadow:none;
+  min-width:44px;
+  min-height:44px;
+  will-change:transform;
 }
-.orbit-btn img{
-  display: block;
-  width: clamp(78px, 16vw, 150px);
-  height: auto;
+.orbit-item img{
+  display:block;
+  width:clamp(80px,16vw,160px);
+  height:auto;
+  user-select:none;
+  pointer-events:auto;
+  -webkit-user-drag:none;
 }
-.orbit-btn:hover{ box-shadow: 0 10px 28px rgba(0,0,0,.14); }
-.orbit-btn:focus-visible{ outline: 2px solid var(--mbm-ink); outline-offset: 2px; }
 
-/* Reduced motion: disable orbit, present static links */
-@media (prefers-reduced-motion: reduce){
+/* Reduced motion fallback */
+@media (prefers-reduced-motion:reduce){
   .orbit-stage{
-    display: grid;
-    align-content: center;
-    justify-items: center;
-    gap: 16px;
-    aspect-ratio: auto;
-    background: var(--mbm-surface);
-    border: 1px dashed var(--mbm-line);
-    padding: 22px;
+    display:grid;
+    align-content:center;
+    justify-items:center;
+    gap:14px;
+    aspect-ratio:auto;
   }
-  .orbit-btn{
-    position: static;
-    transform: none !important;
+  .orbit-item{
+    position:static;
+    transform:none!important;
   }
-}
-
-/* Small screens */
-@media (max-width: 520px){
-  :root{ --stage-max: 640px; }
-  .orbit-shell{ padding: clamp(6px, 2.4vw, 16px); }
 }
