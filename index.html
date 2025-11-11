@@ -5,30 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MadeByMeier — Landing</title>
 
-  <!-- Drippy/Gothic vibe; you can swap fonts later without changing markup -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rubik+Wet+Paint&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="./assets/mbm-landing.css" />
+  <link rel="stylesheet" href="./assets/mbm-landing.css?v=6" />
 </head>
 <body>
   <main class="mbm-landing" aria-labelledby="site-title">
-    <!-- Wordmark (large, black, drippy/gothic), no header/nav -->
     <h1 id="site-title" class="mbm-wordmark" aria-label="MadeByMeier">
       <span class="mbm-wordmark__drip">MadeByMeier</span>
     </h1>
 
-    <!-- Stage: skull center + orbiting product images (clickable buttons) -->
     <section class="orbit-section" aria-label="MadeByMeier product shortcuts" role="group">
       <div class="orbit-shell">
         <div class="orbit-stage" id="orbit-stage" aria-live="polite">
-          <!-- Center skull -->
           <div class="orbit-center" aria-hidden="true">
             <img src="./assets/skull.svg" alt="" class="skull" decoding="async" />
           </div>
 
-          <!-- Orbiting clickable images (no text on the buttons) -->
-          <!-- Product #1: Belt -->
           <a class="orbit-btn orbit-btn--middle"
              href="/products/belt"
              data-ring="middle"
@@ -38,7 +32,6 @@
             <img src="./assets/product-belt.svg" alt="Belt — View product" decoding="async" />
           </a>
 
-          <!-- Product #2: Backpack -->
           <a class="orbit-btn orbit-btn--outer"
              href="/products/backpack"
              data-ring="outer"
@@ -48,10 +41,9 @@
             <img src="./assets/product-backpack.svg" alt="Backpack — View product" decoding="async" />
           </a>
 
-          <!-- Decorative rings (hidden on reduced-motion) -->
-          <div class="orbit-ring orbit-ring--outer" data-ring="outer" aria-hidden="true"></div>
-          <div class="orbit-ring orbit-ring--middle" data-ring="middle" aria-hidden="true"></div>
-          <div class="orbit-ring orbit-ring--inner" data-ring="inner" aria-hidden="true"></div>
+          <div class="orbit-ring orbit-ring--outer" aria-hidden="true"></div>
+          <div class="orbit-ring orbit-ring--middle" aria-hidden="true"></div>
+          <div class="orbit-ring orbit-ring--inner" aria-hidden="true"></div>
         </div>
 
         <noscript>
@@ -66,6 +58,7 @@
     </section>
   </main>
 
-  <script defer src="./assets/mbm-landing.js"></script>
+  <!-- cache-bust with ?v=6 so the newest JS loads 100% -->
+  <script defer src="./assets/mbm-landing.js?v=6"></script>
 </body>
 </html>
