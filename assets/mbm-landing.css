@@ -40,7 +40,6 @@ body {
   line-height: 1;
 }
 .mbm-wordmark__drip{
-  /* Drippy first, gothic fallback; adjust order if you prefer gothic primary */
   font-family: 'Rubik Wet Paint', cursive, 'UnifrakturMaguntia', serif;
   font-size: clamp(38px, 9vw, 110px);
   color: var(--mbm-ink);
@@ -72,7 +71,8 @@ body {
   background: radial-gradient(ellipse at center, #ffffff 0%, #faf7f2 55%, #f3efe8 100%);
   overflow: visible;
   transform-style: preserve-3d;
-  touch-action: manipulation;
+  /* Important: allow our JS to fully capture gestures */
+  touch-action: none;
 }
 
 /* Center skull */
@@ -103,11 +103,10 @@ body {
 /* Orbit buttons — image-only chips with creamy backplate (never dark) */
 .orbit-btn{
   position: absolute;
-  top: 0;                     /* anchor transform to stage origin */
-  left: 0;
+  top: 0; left: 0;               /* anchor transform to stage origin */
   transform: translate(-50%, -50%) translateZ(0);
   display: inline-flex; align-items: center; justify-content: center;
-  background: #ffffffcc;      /* light + slightly translucent */
+  background: #ffffffcc;         /* light + slightly translucent */
   border: 1px solid var(--mbm-line);
   border-radius: 9999px;
   box-shadow: 0 6px 16px rgba(0,0,0,.08);
@@ -120,14 +119,13 @@ body {
 }
 .orbit-btn img{
   display: block;
-  width: clamp(72px, 14vw, 140px); /* larger than before */
+  width: clamp(72px, 14vw, 140px);
   height: auto;
 }
 .orbit-btn:hover{ box-shadow: 0 10px 28px rgba(0,0,0,.12); }
 .orbit-btn:focus-visible{ outline: 2px solid var(--mbm-ink); outline-offset: 2px; }
 
-/* IMPORTANT: no CSS transform animations here.
-   JS owns the transform so orbit + dragging work reliably. */
+/* No CSS transform animations here; JS owns transform */
 
 /* Reduced motion: disable orbit, present static links */
 @media (prefers-reduced-motion: reduce){

@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------
-   MadeByMeier • Orbit motion (auto-spin + drag + inertia)
+   MadeByMeier • Orbit motion (auto-spin + true angular drag)
    ---------------------------------------------------------- */
 (function(){
   console.log("MBM orbit script loaded");
@@ -16,11 +16,10 @@
   // Per-ring configuration:
   // - radius: fraction of stage size
   // - auto: radians per second (continuous spin)
-  // - drag: multiplier applied to user spin gesture
   const cfg = {
-    outer:  { radius: 0.50, auto: 0.20, drag: 0.22 },
-    middle: { radius: 0.36, auto: 0.28, drag: 0.32 },
-    inner:  { radius: 0.24, auto: 0.36, drag: 0.42 }
+    outer:  { radius: 0.50, auto: 0.18 },
+    middle: { radius: 0.36, auto: 0.24 },
+    inner:  { radius: 0.24, auto: 0.32 }
   };
 
   // Initial placement for each button
@@ -35,32 +34,65 @@
   let width = stage.clientWidth, height = stage.clientHeight;
   let cx = width/2, cy = height/2;
 
-  // User interaction / inertia
-  let spin = 0;        // accumulated drag rotation
-  let vel  = 0;        // inertial velocity from drag
-  let dragging = false, lastX = 0;
+  // For pointer → angle math we need the stage's client rect
+  let rect = stage.getBoundingClientRect();
+
+  // User interaction / inertia (in radians)
+  let spin = 0;        // accumulated rotation from user
+  let vel  = 0;        // angular velocity from drag
+  let dragging = false;
+  let lastAngle = 0;
+  let lastTime  = performance.now();
 
   // Time for auto-spin
   let t = 0;           // seconds
-  let last = performance.now();
+  let lastFrame = performance.now();
   let raf = null;
 
-  // Keep layout reactive
-  new ResizeObserver(()=>{
-    width = stage.clientWidth; height = stage.clientHeight;
+  function updateRect(){
+    rect = stage.getBoundingClientRect();
+    width = rect.width; height = rect.height;
     cx = width/2; cy = height/2;
-  }).observe(stage);
+  }
+  updateRect();
+
+  new ResizeObserver(updateRect).observe(stage);
+  window.addEventListener('scroll', updateRect, { passive: true });
+
+  function pointerAngle(e){
+    // pointer position relative to stage
+    const px = e.clientX - rect.left;
+    const py = e.clientY - rect.top;
+    return Math.atan2(py - cy, px - cx);
+  }
+  function normAngle(a){
+    // normalize to [-PI, PI] to avoid jumps
+    while (a >  Math.PI) a -= Math.PI*2;
+    while (a < -Math.PI) a += Math.PI*2;
+    return a;
+  }
 
   // Pointer controls (mouse/touch/pen)
   stage.addEventListener('pointerdown', (e)=>{
-    dragging = true; lastX = e.clientX;
+    dragging = true;
+    lastAngle = pointerAngle(e);
+    lastTime  = performance.now();
     stage.setPointerCapture(e.pointerId);
+    // stop iOS tap-to-zoom/scroll feels
+    e.preventDefault();
   });
   stage.addEventListener('pointermove', (e)=>{
     if (!dragging) return;
-    const dx = e.clientX - lastX; lastX = e.clientX;
-    spin += dx * 0.006;   // accumulate rotation
-    vel  = dx * 0.003;    // inertia
+    const now = performance.now();
+    const ang = pointerAngle(e);
+    const dA  = normAngle(ang - lastAngle);
+    const dt  = (now - lastTime) / 1000;
+
+    spin += dA;              // accumulate rotation
+    vel   = dA / Math.max(dt, 0.001); // angular velocity for inertia
+
+    lastAngle = ang;
+    lastTime  = now;
   });
   stage.addEventListener('pointerup',   ()=> dragging = false);
   stage.addEventListener('pointercancel',()=> dragging = false);
@@ -68,27 +100,27 @@
   // Pause orbit when tab hidden
   document.addEventListener('visibilitychange', ()=>{
     if (document.hidden) cancelAnimationFrame(raf);
-    else { last = performance.now(); loop(last); }
+    else { lastFrame = performance.now(); loop(lastFrame); }
   });
 
   function loop(now){
     raf = requestAnimationFrame(loop);
 
     // delta time in seconds
-    const dt = (now - last) / 1000;
-    last = now;
+    const dt = (now - lastFrame) / 1000;
+    lastFrame = now;
     t += dt;
 
-    // inertia decay (so it slows smoothly after dragging)
-    vel *= 0.95;
-    spin += vel;
+    // inertia decay — slightly lower friction for "freer" feel
+    vel *= 0.96;
+    spin += vel * dt;
 
     state.forEach(s=>{
       const conf = cfg[s.ring] || cfg.middle;
       const r = Math.min(width, height) * conf.radius;
 
       // angle = base spacing + continuous auto spin + user spin component
-      const a = s.base + t * conf.auto + spin * conf.drag;
+      const a = s.base + t * conf.auto + spin;
 
       // faux depth
       const z = Math.sin(a) * 0.5;
