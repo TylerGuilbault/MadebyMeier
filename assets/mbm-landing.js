@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------
-   MadeByMeier • Orbit motion (drag + inertia + accessibility)
+   MadeByMeier • Orbit motion (auto-spin + drag + inertia)
    ---------------------------------------------------------- */
 (function(){
   console.log("MBM orbit script loaded");
@@ -13,11 +13,14 @@
 
   const buttons = Array.from(stage.querySelectorAll('.orbit-btn'));
 
-  // Tune per-ring feel (desktop + mobile friendly)
+  // Per-ring configuration:
+  // - radius: fraction of stage size
+  // - auto: radians per second (continuous spin)
+  // - drag: multiplier applied to user spin gesture
   const cfg = {
-    outer:  { radius: 0.50, speed: 0.22 },
-    middle: { radius: 0.36, speed: 0.32 },
-    inner:  { radius: 0.24, speed: 0.42 }
+    outer:  { radius: 0.50, auto: 0.20, drag: 0.22 },
+    middle: { radius: 0.36, auto: 0.28, drag: 0.32 },
+    inner:  { radius: 0.24, auto: 0.36, drag: 0.42 }
   };
 
   // Initial placement for each button
@@ -31,7 +34,16 @@
 
   let width = stage.clientWidth, height = stage.clientHeight;
   let cx = width/2, cy = height/2;
-  let spin = 0, vel = 0, dragging = false, lastX = 0, raf = null;
+
+  // User interaction / inertia
+  let spin = 0;        // accumulated drag rotation
+  let vel  = 0;        // inertial velocity from drag
+  let dragging = false, lastX = 0;
+
+  // Time for auto-spin
+  let t = 0;           // seconds
+  let last = performance.now();
+  let raf = null;
 
   // Keep layout reactive
   new ResizeObserver(()=>{
@@ -47,8 +59,8 @@
   stage.addEventListener('pointermove', (e)=>{
     if (!dragging) return;
     const dx = e.clientX - lastX; lastX = e.clientX;
-    spin += dx * 0.006;
-    vel  = dx * 0.003; // inertia
+    spin += dx * 0.006;   // accumulate rotation
+    vel  = dx * 0.003;    // inertia
   });
   stage.addEventListener('pointerup',   ()=> dragging = false);
   stage.addEventListener('pointercancel',()=> dragging = false);
@@ -56,18 +68,27 @@
   // Pause orbit when tab hidden
   document.addEventListener('visibilitychange', ()=>{
     if (document.hidden) cancelAnimationFrame(raf);
-    else loop();
+    else { last = performance.now(); loop(last); }
   });
 
-  function loop(){
+  function loop(now){
     raf = requestAnimationFrame(loop);
-    vel *= 0.95;      // inertia decay
+
+    // delta time in seconds
+    const dt = (now - last) / 1000;
+    last = now;
+    t += dt;
+
+    // inertia decay (so it slows smoothly after dragging)
+    vel *= 0.95;
     spin += vel;
 
     state.forEach(s=>{
       const conf = cfg[s.ring] || cfg.middle;
       const r = Math.min(width, height) * conf.radius;
-      const a = s.base + spin * conf.speed;
+
+      // angle = base spacing + continuous auto spin + user spin component
+      const a = s.base + t * conf.auto + spin * conf.drag;
 
       // faux depth
       const z = Math.sin(a) * 0.5;
@@ -83,5 +104,5 @@
     });
   }
 
-  loop();
+  loop(performance.now());
 })();
