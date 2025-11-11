@@ -1,20 +1,23 @@
 /* ----------------------------------------------------------
-   MadeByMeier • Landing styles (creamy light UI, black text)
-   Mobile-first, Shopify-safe (no dark fills, text always black)
+   MadeByMeier • Landing styles (creamy but darker, text black)
+   - More spacing below header
+   - No color-separated box
+   - No guide rings
+   - Mobile-first, Shopify-safe
    ---------------------------------------------------------- */
 
 :root{
-  /* Creamy / warm light palette */
-  --mbm-bg: #f7f4ef;            /* page background (creamy) */
-  --mbm-surface: #fbf9f5;       /* lighter panel */
+  /* Darker, still warm/creamy background (not harsh) */
+  --mbm-bg: #e3dbcf;            /* darker creamy */
+  --mbm-surface: #e3dbcf;       /* same as bg → no separation */
   --mbm-ink: #111111;           /* all text is black */
-  --mbm-line: rgba(0,0,0,.08);  /* subtle borders */
-  --mbm-ring: rgba(0,0,0,.16);  /* orbit guides */
+  --mbm-line: rgba(0,0,0,.08);  /* subtle borders if ever needed */
 
   /* Layout */
   --stage-max: 780px;
-  --wordmark-top-pad: clamp(16px, 6vh, 56px);
-  --shell-pad: clamp(16px, 4vw, 40px);
+  --wordmark-top-pad: clamp(18px, 6vh, 56px);
+  --wordmark-bottom-gap: clamp(28px, 10vh, 110px); /* EXTRA spacing you asked for */
+  --shell-pad: clamp(4px, 2.6vw, 20px);
 }
 
 html, body { height: 100%; }
@@ -35,16 +38,14 @@ body {
 
 /* Wordmark */
 .mbm-wordmark{
-  margin: var(--wordmark-top-pad) 0 0;
+  margin: var(--wordmark-top-pad) 0 var(--wordmark-bottom-gap);
   text-align: center;
   line-height: 1;
 }
-.mbm-wordmark__drip{
-  /* Drippy first, gothic fallback; adjust order if you prefer gothic primary */
-  font-family: 'Rubik Wet Paint', cursive, 'UnifrakturMaguntia', serif;
-  font-size: clamp(38px, 9vw, 110px);
-  color: var(--mbm-ink);
-  letter-spacing: 0.02em;
+.mbm-wordmark-svg{
+  width: min(94vw, 1400px);
+  height: auto;
+  display: inline-block;
 }
 
 /* Orbit area container */
@@ -53,26 +54,27 @@ body {
   place-items: center;
   padding: 0 0 clamp(20px, 6vh, 40px);
 }
+/* orbit-shell keeps padding only; no background, border, shadow */
 .orbit-shell{
-  width: min(1200px, 94vw);
+  width: min(1200px, 96vw);
   padding: var(--shell-pad);
-  background: var(--mbm-surface);
-  border: 1px solid var(--mbm-line);
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0,0,0,.06);
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
-/* The circular stage (no dark fills) */
+/* The circular stage (subtle, same tone) */
 .orbit-stage{
   position: relative;
-  width: min(90vw, var(--stage-max));
+  width: min(94vw, var(--stage-max));
   aspect-ratio: 1 / 1;
   margin: 0 auto;
   border-radius: 50%;
-  background: radial-gradient(ellipse at center, #ffffff 0%, #faf7f2 55%, #f3efe8 100%);
+  /* Slight tonal gradient, but same family color */
+  background: radial-gradient(ellipse at center, #e9e2d7 0%, #e5ddcf 55%, #e0d8cb 100%);
   overflow: visible;
   transform-style: preserve-3d;
-  touch-action: manipulation;
+  touch-action: none; /* JS drag owns gestures */
 }
 
 /* Center skull */
@@ -84,35 +86,25 @@ body {
   pointer-events: none;
 }
 .orbit-center .skull{
-  width: clamp(68px, 14vw, 140px);
+  width: clamp(72px, 16vw, 150px);
   height: auto;
   filter: drop-shadow(0 3px 8px rgba(0,0,0,.12));
 }
 
-/* Guide rings */
-.orbit-ring{
-  position: absolute; inset: 0; margin: auto;
-  border-radius: 50%;
-  pointer-events: none;
-  border: 1px dashed var(--mbm-ring);
-}
-.orbit-ring--outer { width: 100%; height: 100%; }
-.orbit-ring--middle{ width: 72%; height: 72%; }
-.orbit-ring--inner { width: 46%; height: 46%; }
+/* Guide rings REMOVED */
 
 /* Orbit buttons — image-only chips with creamy backplate (never dark) */
 .orbit-btn{
   position: absolute;
-  top: 0;                     /* anchor transform to stage origin */
-  left: 0;
+  top: 0; left: 0;               /* anchor transform to stage origin */
   transform: translate(-50%, -50%) translateZ(0);
   display: inline-flex; align-items: center; justify-content: center;
-  background: #ffffffcc;      /* light + slightly translucent */
+  background: #ffffffcc;         /* light + slightly translucent */
   border: 1px solid var(--mbm-line);
   border-radius: 9999px;
-  box-shadow: 0 6px 16px rgba(0,0,0,.08);
-  padding: 12px 14px;
-  min-width: 44px; min-height: 44px; /* touch target */
+  box-shadow: 0 6px 16px rgba(0,0,0,.10);
+  padding: 14px 16px;
+  min-width: 48px; min-height: 48px; /* tap target */
   text-decoration: none;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
@@ -120,27 +112,23 @@ body {
 }
 .orbit-btn img{
   display: block;
-  width: clamp(72px, 14vw, 140px); /* larger than before */
+  width: clamp(78px, 16vw, 150px);
   height: auto;
 }
-.orbit-btn:hover{ box-shadow: 0 10px 28px rgba(0,0,0,.12); }
+.orbit-btn:hover{ box-shadow: 0 10px 28px rgba(0,0,0,.14); }
 .orbit-btn:focus-visible{ outline: 2px solid var(--mbm-ink); outline-offset: 2px; }
-
-/* IMPORTANT: no CSS transform animations here.
-   JS owns the transform so orbit + dragging work reliably. */
 
 /* Reduced motion: disable orbit, present static links */
 @media (prefers-reduced-motion: reduce){
-  .orbit-ring{ display: none; }
   .orbit-stage{
     display: grid;
     align-content: center;
     justify-items: center;
-    gap: 14px;
+    gap: 16px;
     aspect-ratio: auto;
     background: var(--mbm-surface);
     border: 1px dashed var(--mbm-line);
-    padding: 20px;
+    padding: 22px;
   }
   .orbit-btn{
     position: static;
@@ -151,6 +139,5 @@ body {
 /* Small screens */
 @media (max-width: 520px){
   :root{ --stage-max: 640px; }
-  .orbit-shell{ padding: clamp(10px, 3vw, 24px); }
-  .mbm-wordmark__drip{ font-size: clamp(36px, 12vw, 88px); }
+  .orbit-shell{ padding: clamp(6px, 2.4vw, 16px); }
 }

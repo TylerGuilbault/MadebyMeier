@@ -1,26 +1,25 @@
 /* ----------------------------------------------------------
-   MadeByMeier • Orbit v6 (auto-spin + true angular drag)
+   MadeByMeier • Orbit v7 (auto-spin + true angular drag)
+   - Unchanged logic, retuned radii for bigger stage
    ---------------------------------------------------------- */
 (function(){
-  const VERSION = "v6";
+  const VERSION = "v7";
   console.log(`MBM orbit ${VERSION} loaded`);
 
   const stage = document.getElementById('orbit-stage');
   if (!stage){ console.warn("MBM: no #orbit-stage found"); return; }
 
-  // TEMP: ignore Reduce Motion so we can verify behavior.
-  // (For production, set `const allowMotion = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;`)
-  const allowMotion = true;
-  console.log("MBM allowMotion =", allowMotion);
-  if (!allowMotion) return;
+  // Respect user preference; set to true for dev if you need to force motion
+  const allowMotion = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!allowMotion){ console.log("MBM: reduced-motion active, skipping JS"); return; }
 
   const buttons = Array.from(stage.querySelectorAll('.orbit-btn'));
-  console.log("MBM buttons =", buttons.length);
 
+  // Slightly larger radii to fit the bigger spacing and darker bg
   const cfg = {
-    outer:  { radius: 0.50, auto: 0.18 },
-    middle: { radius: 0.36, auto: 0.24 },
-    inner:  { radius: 0.24, auto: 0.32 }
+    outer:  { radius: 0.53, auto: 0.18 },
+    middle: { radius: 0.38, auto: 0.24 },
+    inner:  { radius: 0.26, auto: 0.32 }
   };
 
   const state = buttons.map(btn=>{
@@ -35,14 +34,14 @@
   let width = rect.width, height = rect.height;
   let cx = width/2, cy = height/2;
 
-  // angular user input + inertia
+  // Angular interaction
   let spin = 0;      // radians
   let vel  = 0;      // radians/sec
   let dragging = false;
   let lastAngle = 0;
   let lastTime  = performance.now();
 
-  // auto-spin time
+  // Auto-spin time
   let t = 0;
   let lastFrame = performance.now();
   let raf = null;

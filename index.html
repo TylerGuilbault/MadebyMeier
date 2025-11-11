@@ -5,24 +5,61 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MadeByMeier — Landing</title>
 
+  <!-- Gothic/drippy vibes; used by the inline SVG, too -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik+Wet+Paint&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Rubik+Wet+Paint&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="./assets/mbm-landing.css?v=6" />
+  <link rel="stylesheet" href="./assets/mbm-landing.css?v=7" />
 </head>
 <body>
   <main class="mbm-landing" aria-labelledby="site-title">
+    <!-- Wordmark: inline SVG with a subtle “cracked/distressed” filter -->
     <h1 id="site-title" class="mbm-wordmark" aria-label="MadeByMeier">
-      <span class="mbm-wordmark__drip">MadeByMeier</span>
+      <svg class="mbm-wordmark-svg" viewBox="0 0 1600 320" role="img" aria-label="MadeByMeier">
+        <defs>
+          <!-- Subtle weathering/cracks -->
+          <filter id="mbmCrack" x="-5%" y="-30%" width="110%" height="160%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="noise"/>
+            <feColorMatrix type="saturate" values="0" result="mono"/>
+            <feComponentTransfer in="mono" result="threshold">
+              <feFuncA type="table" tableValues="0 0 0 0 .2 .65 1 1"/>
+            </feComponentTransfer>
+            <feDisplacementMap in="SourceGraphic" in2="threshold" scale="2.6" xChannelSelector="R" yChannelSelector="A"/>
+          </filter>
+          <linearGradient id="inkGrad" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#0d0d0d"/>
+            <stop offset="100%" stop-color="#111111"/>
+          </linearGradient>
+        </defs>
+        <style>
+          .mbm-wordmark-text {
+            font-family: 'UnifrakturMaguntia', 'Rubik Wet Paint', serif;
+            font-weight: 400;
+            fill: url(#inkGrad);
+          }
+          @media (max-width: 600px){
+            .mbm-wordmark-text{ letter-spacing: .5px; }
+          }
+        </style>
+        <!-- The word; sized to viewBox so CSS can scale responsively -->
+        <text class="mbm-wordmark-text" x="50%" y="74%" text-anchor="middle" font-size="220" filter="url(#mbmCrack)">
+          MadeByMeier
+        </text>
+      </svg>
     </h1>
 
+    <!-- Stage: skull center + orbiting product images (clickable buttons) -->
     <section class="orbit-section" aria-label="MadeByMeier product shortcuts" role="group">
+      <!-- NOTE: no color-separated box now; shell keeps only responsive padding -->
       <div class="orbit-shell">
         <div class="orbit-stage" id="orbit-stage" aria-live="polite">
+          <!-- Center skull -->
           <div class="orbit-center" aria-hidden="true">
             <img src="./assets/skull.svg" alt="" class="skull" decoding="async" />
           </div>
 
+          <!-- Orbiting clickable images (no text on the buttons) -->
+          <!-- Product #1: Belt -->
           <a class="orbit-btn orbit-btn--middle"
              href="/products/belt"
              data-ring="middle"
@@ -32,6 +69,7 @@
             <img src="./assets/product-belt.svg" alt="Belt — View product" decoding="async" />
           </a>
 
+          <!-- Product #2: Backpack -->
           <a class="orbit-btn orbit-btn--outer"
              href="/products/backpack"
              data-ring="outer"
@@ -41,9 +79,7 @@
             <img src="./assets/product-backpack.svg" alt="Backpack — View product" decoding="async" />
           </a>
 
-          <div class="orbit-ring orbit-ring--outer" aria-hidden="true"></div>
-          <div class="orbit-ring orbit-ring--middle" aria-hidden="true"></div>
-          <div class="orbit-ring orbit-ring--inner" aria-hidden="true"></div>
+          <!-- Guide rings REMOVED per your spec -->
         </div>
 
         <noscript>
@@ -58,7 +94,6 @@
     </section>
   </main>
 
-  <!-- cache-bust with ?v=6 so the newest JS loads 100% -->
-  <script defer src="./assets/mbm-landing.js?v=6"></script>
+  <script defer src="./assets/mbm-landing.js?v=7"></script>
 </body>
 </html>
