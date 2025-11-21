@@ -2,7 +2,6 @@
   --mbm-bg: #e3dbcf;
   --mbm-ink: #111;
   --stage-max: 780px;
-  --currency-opacity: 0.06;
 }
 
 * {
@@ -22,24 +21,6 @@ body {
   justify-content: center;
   overflow: hidden;
   position: relative;
-}
-
-/* Currency Background Texture */
-body::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: var(--currency-opacity);
-  background-image: 
-    url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='10' y='30' font-size='14' fill='%23111' opacity='0.3'%3E$100%3C/text%3E%3Ctext x='120' y='80' font-size='12' fill='%23111' opacity='0.25'%3E€50%3C/text%3E%3Ctext x='50' y='140' font-size='13' fill='%23111' opacity='0.3'%3E¥1000%3C/text%3E%3Ctext x='140' y='160' font-size='11' fill='%23111' opacity='0.2'%3E£20%3C/text%3E%3C/svg%3E");
-  background-size: 400px 400px;
-  background-repeat: repeat;
-  pointer-events: none;
-  z-index: 0;
-  filter: blur(1px);
 }
 
 /* Wordmark */
@@ -65,16 +46,18 @@ body::before {
   max-width: var(--stage-max);
   max-height: var(--stage-max);
   z-index: 5;
+  touch-action: none;
+  user-select: none;
 }
 
-/* Center Logo (replaces skull) */
+/* Center Logo */
 .orbit-center {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 28%;
-  height: 28%;
+  width: 24%;
+  height: 24%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -86,20 +69,25 @@ body::before {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.15));
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.12));
 }
 
 /* Orbit Items */
 .orbit-item {
   position: absolute;
-  width: 18%;
-  height: 18%;
+  width: 16%;
+  height: 16%;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: filter 0.2s ease;
+  cursor: grab;
+  transition: filter 0.15s ease;
   text-decoration: none;
+  will-change: transform, opacity;
+}
+
+.orbit-item:active {
+  cursor: grabbing;
 }
 
 .orbit-item img {
@@ -110,7 +98,7 @@ body::before {
 }
 
 .orbit-item:hover {
-  filter: drop-shadow(0 0 12px rgba(17,17,17,0.4));
+  filter: drop-shadow(0 0 10px rgba(17,17,17,0.3));
 }
 
 .orbit-item:focus {
@@ -130,13 +118,13 @@ body::before {
   }
   
   .orbit-center {
-    width: 32%;
-    height: 32%;
+    width: 28%;
+    height: 28%;
   }
   
   .orbit-item {
-    width: 22%;
-    height: 22%;
+    width: 20%;
+    height: 20%;
   }
 }
 
