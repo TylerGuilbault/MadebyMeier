@@ -223,7 +223,7 @@ body::before {
   transform: translateX(-50%);
   font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
   font-weight: 400;
-  font-size: 28px;
+  font-size: 22px;
   color: #fffdf8;
   letter-spacing: -1.4px;
   pointer-events: none;
@@ -234,7 +234,7 @@ body::before {
 
 @media (max-width: 768px) {
   .swipe-label {
-    font-size: 24px;
+    font-size: 16px;
     bottom: 0.75rem;
   }
 }
