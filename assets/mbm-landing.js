@@ -1,10 +1,10 @@
 (function() {
   'use strict';
 
+  // Configuration
   const cfg = {
-    outer:  { radius: 0.53, auto: 0.15 },  // Slightly slower for smoother feel
-    middle: { radius: 0.38, auto: 0.20 },
-    inner:  { radius: 0.26, auto: 0.28 }
+    outer:  { radius: 0.53, autoSpeed: 0.18 },
+    middle: { radius: 0.38, autoSpeed: 0.24 }
   };
 
   const stage = document.querySelector('.orbit-stage');
@@ -14,135 +14,159 @@
   if (!items.length) return;
 
   const state = {
-    rings: { outer: 0, middle: 0, inner: 0 },
-    size: 0,
-    dragging: false,
-    lastAngle: 0,
-    velocity: 0,
-    lastTime: 0,
-    raf: null,
-    paused: false
+    angles: new Map(),
+    stageSize: 0,
+    isDragging: false,
+    lastPointerAngle: 0,
+    spinVelocity: 0,
+    lastFrameTime: 0,
+    animationId: null
   };
 
-  // Improved drag sensitivity for mobile
-  const DRAG_SENSITIVITY = 0.008;      // Increased from 0.006
-  const VELOCITY_DECAY = 0.94;         // Slightly faster decay
-  const VELOCITY_THRESHOLD = 0.001;
+  // Drag constants
+  const DRAG_MULT = 1.2;
+  const INERTIA_DECAY = 0.92;
+  const MIN_VELOCITY = 0.0005;
 
-  function updateSize() {
-    state.size = Math.min(stage.offsetWidth, stage.offsetHeight);
-  }
-
-  function getPointerAngle(e) {
+  function measureStage() {
     const rect = stage.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 0.5;
-    const centerY = rect.top + rect.height / 0.5;
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    return Math.atan2(clientY - centerY, clientX - centerX);
+    state.stageSize = Math.min(rect.width, rect.height);
   }
 
-  function updateItems() {
+  function getPointerAngle(evt) {
+    const rect = stage.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const px = evt.touches ? evt.touches[0].clientX : evt.clientX;
+    const py = evt.touches ? evt.touches[0].clientY : evt.clientY;
+    return Math.atan2(py - cy, px - cx);
+  }
+
+  function positionItems() {
     items.forEach(item => {
       const ring = item.dataset.ring || 'outer';
-      const angle = state.rings[ring];
-      const r = cfg[ring].radius * state.size * 0.5;
-      
-      const x = Math.cos(angle) * r;
-      const y = Math.sin(angle) * r;
-      const z = Math.sin(angle);
-      
-      const scale = 0.85 + z * 0.15;
-      const opacity = 0.7 + z * 0.3;
-      const zIndex = Math.round(50 + z * 50);
+      const ringCfg = cfg[ring];
+      if (!ringCfg) return;
 
-      item.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px) scale(${scale})`;
+      let angle = state.angles.get(item);
+      if (angle === undefined) {
+        // Initialize with random offset
+        angle = Math.random() * Math.PI * 2;
+        state.angles.set(item, angle);
+      }
+
+      const radiusPx = ringCfg.radius * state.stageSize;
+      const x = Math.cos(angle) * radiusPx;
+      const y = Math.sin(angle) * radiusPx;
+      
+      // Depth effect
+      const depthZ = Math.sin(angle);
+      const scale = 0.8 + depthZ * 0.2;
+      const opacity = 0.65 + depthZ * 0.35;
+      const zIndex = Math.round(50 + depthZ * 50);
+
+      item.style.left = '50%';
+      item.style.top = '50%';
+      item.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(${scale})`;
       item.style.opacity = opacity;
       item.style.zIndex = zIndex;
     });
   }
 
-  function tick(time) {
-    if (state.paused) return;
+  function animate(timestamp) {
+    const deltaTime = state.lastFrameTime ? (timestamp - state.lastFrameTime) / 16.67 : 1;
+    state.lastFrameTime = timestamp;
 
-    const dt = state.lastTime ? (time - state.lastTime) / 16.67 : 1;
-    state.lastTime = time;
+    if (!state.isDragging) {
+      // Auto-rotate each ring
+      items.forEach(item => {
+        const ring = item.dataset.ring || 'outer';
+        const ringCfg = cfg[ring];
+        if (!ringCfg) return;
 
-    if (!state.dragging) {
-      Object.keys(cfg).forEach(ring => {
-        state.rings[ring] += cfg[ring].auto * dt * 0.01;
+        let angle = state.angles.get(item);
+        angle += ringCfg.autoSpeed * 0.01 * deltaTime;
+        state.angles.set(item, angle);
       });
 
-      if (Math.abs(state.velocity) > VELOCITY_THRESHOLD) {
-        Object.keys(state.rings).forEach(ring => {
-          state.rings[ring] += state.velocity * dt;
+      // Apply inertia from drag
+      if (Math.abs(state.spinVelocity) > MIN_VELOCITY) {
+        items.forEach(item => {
+          let angle = state.angles.get(item);
+          angle += state.spinVelocity * deltaTime;
+          state.angles.set(item, angle);
         });
-        state.velocity *= VELOCITY_DECAY;
+        state.spinVelocity *= INERTIA_DECAY;
       }
     }
 
-    updateItems();
-    state.raf = requestAnimationFrame(tick);
+    positionItems();
+    state.animationId = requestAnimationFrame(animate);
   }
 
-  function startDrag(e) {
-    state.dragging = true;
-    state.lastAngle = getPointerAngle(e);
-    state.velocity = 0;
-    e.preventDefault();
+  function handleDragStart(evt) {
+    state.isDragging = true;
+    state.lastPointerAngle = getPointerAngle(evt);
+    state.spinVelocity = 0;
+    evt.preventDefault();
   }
 
-  function moveDrag(e) {
-    if (!state.dragging) return;
-    
-    const currentAngle = getPointerAngle(e);
-    let delta = currentAngle - state.lastAngle;
-    
-    if (delta > Math.PI) delta -= Math.PI * 2;
-    if (delta < -Math.PI) delta += Math.PI * 2;
-    
-    Object.keys(state.rings).forEach(ring => {
-      state.rings[ring] += delta * DRAG_SENSITIVITY;
+  function handleDragMove(evt) {
+    if (!state.isDragging) return;
+
+    const currentAngle = getPointerAngle(evt);
+    let angleDelta = currentAngle - state.lastPointerAngle;
+
+    // Normalize angle delta
+    if (angleDelta > Math.PI) angleDelta -= Math.PI * 2;
+    if (angleDelta < -Math.PI) angleDelta += Math.PI * 2;
+
+    // Rotate all items by drag amount
+    items.forEach(item => {
+      let angle = state.angles.get(item);
+      angle += angleDelta * DRAG_MULT;
+      state.angles.set(item, angle);
     });
-    
-    state.velocity = delta * DRAG_SENSITIVITY;
-    state.lastAngle = currentAngle;
-    e.preventDefault();
+
+    state.spinVelocity = angleDelta * DRAG_MULT;
+    state.lastPointerAngle = currentAngle;
+    evt.preventDefault();
   }
 
-  function endDrag() {
-    state.dragging = false;
+  function handleDragEnd() {
+    state.isDragging = false;
   }
 
-  // Event listeners
-  stage.addEventListener('mousedown', startDrag);
-  stage.addEventListener('touchstart', startDrag, { passive: false });
+  // Event bindings
+  stage.addEventListener('mousedown', handleDragStart);
+  stage.addEventListener('touchstart', handleDragStart, { passive: false });
   
-  document.addEventListener('mousemove', moveDrag);
-  document.addEventListener('touchmove', moveDrag, { passive: false });
+  window.addEventListener('mousemove', handleDragMove);
+  window.addEventListener('touchmove', handleDragMove, { passive: false });
   
-  document.addEventListener('mouseup', endDrag);
-  document.addEventListener('touchend', endDrag);
+  window.addEventListener('mouseup', handleDragEnd);
+  window.addEventListener('touchend', handleDragEnd);
 
-  // Resize observer
-  const ro = new ResizeObserver(() => {
-    updateSize();
-    updateItems();
+  // Resize handling
+  const resizeObserver = new ResizeObserver(() => {
+    measureStage();
+    positionItems();
   });
-  ro.observe(stage);
+  resizeObserver.observe(stage);
 
-  // Visibility handling
+  // Pause when tab hidden
   document.addEventListener('visibilitychange', () => {
-    state.paused = document.hidden;
-    if (!state.paused) {
-      state.lastTime = 0;
-      state.raf = requestAnimationFrame(tick);
+    if (document.hidden) {
+      if (state.animationId) cancelAnimationFrame(state.animationId);
+    } else {
+      state.lastFrameTime = 0;
+      state.animationId = requestAnimationFrame(animate);
     }
   });
 
   // Initialize
-  updateSize();
-  updateItems();
-  state.raf = requestAnimationFrame(tick);
+  measureStage();
+  positionItems();
+  state.animationId = requestAnimationFrame(animate);
 
 })();
