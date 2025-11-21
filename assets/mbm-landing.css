@@ -1,113 +1,151 @@
-/* ----------------------------------------------------------
-   MadeByMeier v8 • minimal orbit look
-   - no chip backgrounds
-   - no labels
-   - darker creamy background
-   ---------------------------------------------------------- */
-
-:root{
-  --mbm-bg:#e3dbcf;
-  --mbm-ink:#111;
-  --stage-max:780px;
-  --wordmark-top-pad:clamp(20px,7vh,64px);
-  --wordmark-bottom-gap:clamp(30px,10vh,120px);
+:root {
+  --mbm-bg: #e3dbcf;
+  --mbm-ink: #111;
+  --stage-max: 780px;
+  --currency-opacity: 0.06;
 }
 
-html,body{height:100%}
-body{
-  margin:0;
-  background:var(--mbm-bg);
-  color:var(--mbm-ink);
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.mbm-landing{
-  min-height:100dvh;
-  display:grid;
-  grid-template-rows:auto 1fr;
+body {
+  font-family: Georgia, serif;
+  background-color: var(--mbm-bg);
+  color: var(--mbm-ink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
 }
 
-.mbm-wordmark{
-  margin:var(--wordmark-top-pad) 0 var(--wordmark-bottom-gap);
-  text-align:center;
-}
-.mbm-wordmark-svg{
-  width:min(94vw,1400px);
-  height:auto;
-}
-.mbm-wordmark-text{
-  font-family:'UnifrakturMaguntia',serif;
-  font-weight:400;
-  fill:url(#inkGrad);
-}
-
-.orbit-section{
-  display:grid;
-  place-items:center;
-}
-.orbit-shell{
-  width:min(1200px,96vw);
-  background:transparent;
-}
-.orbit-stage{
-  position:relative;
-  width:min(94vw,var(--stage-max));
-  aspect-ratio:1/1;
-  margin:0 auto;
-  border-radius:50%;
-  background:radial-gradient(ellipse at center,#ddd5ca 0%,#d9d1c6 100%);
-  overflow:visible;
-  transform-style:preserve-3d;
-  touch-action:none;
+/* Currency Background Texture */
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: var(--currency-opacity);
+  background-image: 
+    url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='10' y='30' font-size='14' fill='%23111' opacity='0.3'%3E$100%3C/text%3E%3Ctext x='120' y='80' font-size='12' fill='%23111' opacity='0.25'%3E€50%3C/text%3E%3Ctext x='50' y='140' font-size='13' fill='%23111' opacity='0.3'%3E¥1000%3C/text%3E%3Ctext x='140' y='160' font-size='11' fill='%23111' opacity='0.2'%3E£20%3C/text%3E%3C/svg%3E");
+  background-size: 400px 400px;
+  background-repeat: repeat;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(1px);
 }
 
-/* Center skull */
-.orbit-center{
-  position:absolute;
-  inset:0;
-  display:grid;
-  place-items:center;
-  pointer-events:none;
-}
-.orbit-center .skull{
-  width:clamp(72px,16vw,150px);
-  height:auto;
-  filter:drop-shadow(0 3px 8px rgba(0,0,0,.12));
+/* Wordmark */
+.mbm-wordmark {
+  position: relative;
+  z-index: 10;
+  width: 90%;
+  max-width: 500px;
+  margin-bottom: 2rem;
 }
 
-/* Orbiting items (no background circle) */
-.orbit-item{
-  position:absolute;
-  top:0;left:0;
-  transform:translate(-50%,-50%) translateZ(0);
-  display:block;
-  border:none;
-  background:none;
-  box-shadow:none;
-  min-width:44px;
-  min-height:44px;
-  will-change:transform;
-}
-.orbit-item img{
-  display:block;
-  width:clamp(80px,16vw,160px);
-  height:auto;
-  user-select:none;
-  pointer-events:auto;
-  -webkit-user-drag:none;
+.mbm-wordmark svg {
+  width: 100%;
+  height: auto;
+  fill: var(--mbm-ink);
 }
 
-/* Reduced motion fallback */
-@media (prefers-reduced-motion:reduce){
-  .orbit-stage{
-    display:grid;
-    align-content:center;
-    justify-items:center;
-    gap:14px;
-    aspect-ratio:auto;
+/* Orbit Stage */
+.orbit-stage {
+  position: relative;
+  width: 90vmin;
+  height: 90vmin;
+  max-width: var(--stage-max);
+  max-height: var(--stage-max);
+  z-index: 5;
+}
+
+/* Center Logo (replaces skull) */
+.orbit-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 28%;
+  height: 28%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.center-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.15));
+}
+
+/* Orbit Items */
+.orbit-item {
+  position: absolute;
+  width: 18%;
+  height: 18%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: filter 0.2s ease;
+  text-decoration: none;
+}
+
+.orbit-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.orbit-item:hover {
+  filter: drop-shadow(0 0 12px rgba(17,17,17,0.4));
+}
+
+.orbit-item:focus {
+  outline: 2px solid var(--mbm-ink);
+  outline-offset: 4px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .mbm-wordmark {
+    margin-bottom: 1rem;
   }
-  .orbit-item{
-    position:static;
+  
+  .orbit-stage {
+    width: 95vmin;
+    height: 95vmin;
+  }
+  
+  .orbit-center {
+    width: 32%;
+    height: 32%;
+  }
+  
+  .orbit-item {
+    width: 22%;
+    height: 22%;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .orbit-item {
+    animation: none !important;
+  }
+}
     transform:none!important;
   }
 }
