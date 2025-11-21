@@ -325,6 +325,28 @@ body::before {
   #bg-video::-webkit-media-controls-enclosure {
     display: none !important;
   }
+
+  /* Hide all webkit browser controls */
+  #bg-video::-webkit-media-controls {
+    display: none !important;
+    opacity: 0 !important;
+  }
+
+  #bg-video::-webkit-media-controls-enclosure {
+    display: none !important;
+  }
+
+  #bg-video::-webkit-media-controls-panel {
+    display: none !important;
+  }
+
+  #bg-video::-webkit-media-controls-play-button {
+    display: none !important;
+  }
+
+  #bg-video::-webkit-media-controls-start-playback-button {
+    display: none !important;
+  }
   
   body {
     background-color: var(--mbm-bg);
