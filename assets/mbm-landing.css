@@ -8,61 +8,67 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  overflow: hidden;
 }
 
 body {
   font-family: Georgia, serif;
   background-color: var(--mbm-bg);
   color: var(--mbm-ink);
-  min-height: 100vh;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.page-container {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   position: relative;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  gap: 1.5rem;
 }
 
-/* Wordmark */
-.mbm-wordmark {
-  position: relative;
-  z-index: 10;
-  width: 90%;
-  max-width: 500px;
-  margin-bottom: 2rem;
-}
-
-.mbm-wordmark svg {
-  width: 100%;
-  height: auto;
-  fill: var(--mbm-ink);
-}
-
-/* Orbit Stage */
 .orbit-stage {
   position: relative;
-  width: 90vmin;
-  height: 90vmin;
+  width: min(90vw, 90vh);
+  height: min(90vw, 90vh);
   max-width: var(--stage-max);
   max-height: var(--stage-max);
   z-index: 5;
   touch-action: none;
   user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  flex-shrink: 0;
 }
 
-/* Center Logo */
 .orbit-center {
   position: absolute;
-  top: 50%;
+  top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 24%;
-  height: 24%;
+  width: 35%;
+  height: 35%;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
-  pointer-events: none;
+  z-index: 50;
+  cursor: pointer;
+  text-decoration: none;
 }
 
 .center-logo {
@@ -70,23 +76,31 @@ body {
   height: 100%;
   object-fit: contain;
   filter: drop-shadow(0 2px 6px rgba(0,0,0,0.12));
+  pointer-events: none;
 }
 
-/* Orbit Items */
 .orbit-item {
   position: absolute;
-  width: 16%;
-  height: 16%;
+  width: 28%;
+  height: 28%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: grab;
-  transition: filter 0.15s ease;
   text-decoration: none;
-  will-change: transform, opacity;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
 }
 
 .orbit-item:active {
+  cursor: grabbing;
+}
+
+.orbit-item.is-dragging {
+  pointer-events: none;
   cursor: grabbing;
 }
 
@@ -95,42 +109,183 @@ body {
   height: 100%;
   object-fit: contain;
   pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
 }
 
-.orbit-item:hover {
-  filter: drop-shadow(0 0 10px rgba(17,17,17,0.3));
-}
-
-.orbit-item:focus {
+.orbit-item:focus,
+.orbit-center:focus {
   outline: 2px solid var(--mbm-ink);
   outline-offset: 4px;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .mbm-wordmark {
-    margin-bottom: 1rem;
-  }
-  
+/* Bottom CTA Buttons */
+.bottom-cta {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.cta-button {
+  font-family: Georgia, serif;
+  font-size: 14px;
+  font-weight: normal;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid var(--mbm-ink);
+  background: transparent;
+  color: var(--mbm-ink);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 180px;
+}
+
+.cta-button--primary {
+  background: var(--mbm-ink);
+  color: var(--mbm-bg);
+  border-color: var(--mbm-ink);
+}
+
+.cta-button--secondary {
+  background: transparent;
+  color: var(--mbm-ink);
+  border-color: var(--mbm-ink);
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.cta-button--primary:hover {
+  background: #222;
+  border-color: #222;
+}
+
+.cta-button--secondary:hover {
+  background: rgba(17, 17, 17, 0.05);
+}
+
+.cta-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cta-button:focus {
+  outline: 2px solid var(--mbm-ink);
+  outline-offset: 4px;
+}
+
+.cta-text {
+  display: block;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) and (orientation: portrait) {
   .orbit-stage {
-    width: 95vmin;
-    height: 95vmin;
+    width: min(80vw, 70vh);
+    height: min(80vw, 70vh);
   }
   
   .orbit-center {
-    width: 28%;
-    height: 28%;
+    width: 38%;
+    height: 38%;
+    top: 44%;
   }
   
   .orbit-item {
-    width: 20%;
-    height: 20%;
+    width: 32%;
+    height: 32%;
+  }
+
+  .bottom-cta {
+    bottom: 1.5rem;
+    flex-direction: row;
+    gap: 0.5rem;
+    padding: 0 1rem;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .cta-button {
+    font-size: 11px;
+    padding: 0.6rem 1rem;
+    min-width: 0;
+    flex: 1;
+    max-width: 48%;
+  }
+
+  .cta-text {
+    font-size: 10px;
   }
 }
 
-/* Accessibility */
-@media (prefers-reduced-motion: reduce) {
+@media (max-width: 480px) {
+  .bottom-cta {
+    bottom: 1rem;
+    gap: 0.4rem;
+    padding: 0 0.75rem;
+  }
+
+  .cta-button {
+    font-size: 10px;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .cta-text {
+    font-size: 9px;
+  }
+}
+
+@media (max-height: 600px) and (orientation: landscape) {
+  .page-container {
+    gap: 0.5rem;
+  }
+
+  .orbit-stage {
+    width: min(55vw, 85vh);
+    height: min(55vw, 85vh);
+  }
+  
+  .orbit-center {
+    width: 35%;
+    height: 35%;
+    top: 45%;
+  }
+  
   .orbit-item {
-    animation: none !important;
+    width: 28%;
+    height: 28%;
+  }
+
+  .bottom-cta {
+    bottom: 1rem;
+    gap: 0.5rem;
+  }
+
+  .cta-button {
+    font-size: 11px;
+    padding: 0.5rem 1rem;
+    min-width: 140px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit-item,
+  .cta-button {
+    transition: none !important;
   }
 }

@@ -2,102 +2,143 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MadeByMeier – Handcrafted Gothic Accessories</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   
-  <meta name="description" content="MadeByMeier creates handcrafted gothic leather goods with artisanal detail. Explore our money belt and currency backpack collection.">
+  <title>Money Belt & Money Backpack | MadeByMeier | Cash Belt & Dollar Bag</title>
+  <meta name="title" content="Money Belt & Money Backpack | MadeByMeier | Cash Belt & Dollar Bag">
+  <meta name="description" content="MadeByMeier handcrafted money belts and money backpacks made from real currency. Cash belts, dollar belts, currency bags, bill backpacks. Made By Meier, MadeByMeier, Made by Meyer.">
+  <meta name="keywords" content="money belt, money belts, cash belt, cash belts, dollar belt, currency belt, bill belt, money bag belt, moneybelt, money-belt, money backpack, money backpacks, cash backpack, dollar backpack, currency backpack, bill backpack, money bag, cash bag, dollar bag, currency bag, moneybackpack, money-backpack, MadeByMeier, Made By Meier, Made by Meyer, Madeby Meier, Made ByMeier">
+  <meta name="author" content="MadeByMeier">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  
   <link rel="canonical" href="https://madebymeier.com/">
   
   <!-- Open Graph -->
-  <meta property="og:title" content="MadeByMeier – Handcrafted Gothic Accessories">
-  <meta property="og:description" content="Artisanal leather goods crafted from international currency">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://madebymeier.com/">
+  <meta property="og:site_name" content="MadeByMeier">
+  <meta property="og:title" content="Money Belt & Money Backpack | MadeByMeier">
+  <meta property="og:description" content="Handcrafted money belts and money backpacks made from real international currency. Unique cash belts and dollar bags by Made By Meier.">
   <meta property="og:image" content="https://madebymeier.com/assets/social-preview.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="MadeByMeier">
-  <meta name="twitter:description" content="Handcrafted gothic accessories from world currency">
+  <meta name="twitter:url" content="https://madebymeier.com/">
+  <meta name="twitter:title" content="Money Belt & Money Backpack | MadeByMeier">
+  <meta name="twitter:description" content="Handcrafted money belts and money backpacks made from real currency.">
   <meta name="twitter:image" content="https://madebymeier.com/assets/social-preview.jpg">
   
+  <!-- Mobile -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="MadeByMeier">
+  <meta name="theme-color" content="#e3dbcf">
+  
+  <!-- Preload -->
+  <link rel="preload" as="style" href="assets/mbm-landing.css">
+  <link rel="preload" as="script" href="assets/mbm-landing.js">
+  <link rel="preload" as="image" href="assets/logo.svg" type="image/svg+xml">
+  
   <link rel="stylesheet" href="assets/mbm-landing.css">
+  
+  <style>
+    body{margin:0;padding:0;background:#e3dbcf;color:#111;overflow:hidden;position:fixed;width:100%;height:100%}
+    .page-container{width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  </style>
 </head>
 <body>
 
-  <!-- Wordmark Header -->
-  <h1 class="mbm-wordmark">
-    <svg viewBox="0 0 400 80" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <!-- Enhanced cracked texture filter -->
-        <filter id="crackFilter" x="-20%" y="-20%" width="140%" height="140%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="5" seed="2" />
-          <feDisplacementMap in="SourceGraphic" scale="3" />
-          <feGaussianBlur stdDeviation="0.3" />
-        </filter>
-        
-        <!-- Depth/emboss effect -->
-        <filter id="embossFilter">
-          <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
-          <feOffset dx="1" dy="1" result="offsetblur"/>
-          <feComponentTransfer>
-            <feFuncA type="linear" slope="0.5"/>
-          </feComponentTransfer>
-          <feMerge>
-            <feMergeNode/>
-            <feMergeNode in="SourceGraphic"/>
-          </feMerge>
-        </filter>
-      </defs>
-      
-      <text x="50%" y="50%" 
-            dominant-baseline="middle" 
-            text-anchor="middle" 
-            font-family="Georgia, serif" 
-            font-size="28" 
-            font-weight="bold"
-            letter-spacing="2"
-            filter="url(#crackFilter) url(#embossFilter)">
-        MadeByMeier
-      </text>
-    </svg>
-  </h1>
+  <header style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
+    <h1>MadeByMeier Money Belt and Money Backpack Collection</h1>
+    <h2>Handcrafted Cash Belts and Currency Backpacks</h2>
+    <p>Welcome to MadeByMeier (Made By Meier, Made by Meyer), your source for handcrafted money belts, cash belts, dollar belts, and currency belts made from authentic international bills. Our money backpacks (cash backpacks, dollar backpacks, currency backpacks) are unique fashion accessories crafted with artisan quality.</p>
+  </header>
 
-  <!-- Orbit Stage -->
-  <section class="orbit-stage">
-    <!-- Center Logo (replaces skull) -->
-    <div class="orbit-center">
-      <img src="assets/logo.svg" alt="MadeByMeier Logo" class="center-logo">
-    </div>
+  <main class="page-container" role="main">
+    <!-- Orbit Stage -->
+    <section class="orbit-stage" aria-label="Interactive product showcase featuring money belts and money backpacks">
+      <!-- Center Logo - NOW CLICKABLE -->
+      <a href="/collections/all" class="orbit-center" aria-label="View full MadeByMeier catalog" title="Browse Catalog">
+        <img src="assets/logo.svg" alt="MadeByMeier logo" class="center-logo" width="280" height="280" loading="eager" fetchpriority="high">
+      </a>
 
-    <!-- Orbiting Products -->
-    <a href="#belt-product" 
-       class="orbit-item" 
-       data-ring="outer"
-       aria-label="View Money Belt">
-      <img src="assets/belt.svg" alt="Currency Belt">
-    </a>
+      <a href="#money-belt-product" 
+         class="orbit-item orbit-item--belt" 
+         data-ring="shared"
+         data-offset="0"
+         data-size="1.0"
+         aria-label="Shop MadeByMeier money belt"
+         title="Money Belt | Cash Belt - MadeByMeier">
+        <img src="assets/belt.svg" alt="Money belt by MadeByMeier" draggable="false" width="224" height="224" loading="eager">
+      </a>
 
-    <a href="#backpack-product" 
-       class="orbit-item" 
-       data-ring="middle"
-       aria-label="View Currency Backpack">
-      <img src="assets/backpack.svg" alt="Money Backpack">
-    </a>
-  </section>
+      <a href="#money-backpack-product" 
+         class="orbit-item orbit-item--backpack" 
+         data-ring="shared"
+         data-offset="3.14159"
+         data-size="1.3"
+         aria-label="Shop MadeByMeier money backpack"
+         title="Money Backpack | Cash Backpack - MadeByMeier">
+        <img src="assets/backpack.svg" alt="Money backpack by MadeByMeier" draggable="false" width="291" height="291" loading="eager">
+      </a>
+    </section>
 
-  <script src="assets/mbm-landing.js"></script>
+    <!-- Bottom CTA Buttons -->
+    <nav class="bottom-cta" role="navigation" aria-label="Call to action buttons">
+      <a href="#sms-signup" class="cta-button cta-button--primary" aria-label="Sign up for SMS alerts and get 10% off your first order">
+        <span class="cta-text">Sign up to SMS for 10% Off</span>
+      </a>
+      <a href="/collections/all" class="cta-button cta-button--secondary" aria-label="Browse full product catalog">
+        <span class="cta-text">Continue to Catalog</span>
+      </a>
+    </nav>
+  </main>
 
-  <!-- Structured Data -->
+  <script src="assets/mbm-landing.js" defer></script>
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "MadeByMeier",
+    "alternateName": ["Made By Meier", "Made by Meyer"],
     "url": "https://madebymeier.com",
     "logo": "https://madebymeier.com/assets/logo.svg",
-    "description": "Handcrafted gothic leather accessories made from international currency",
-    "sameAs": []
+    "description": "Handcrafted money belts and money backpacks made from authentic international currency"
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "MadeByMeier Money Belt and Money Backpack Collection",
+    "url": "https://madebymeier.com",
+    "mainEntity": {
+      "@type": "ItemList",
+      "itemListElement": [
+        {
+          "@type": "Product",
+          "position": 1,
+          "name": "Money Belt",
+          "alternateName": ["Cash Belt", "Dollar Belt", "Currency Belt"],
+          "image": "https://madebymeier.com/assets/belt.svg",
+          "url": "https://madebymeier.com/products/money-belt",
+          "brand": {"@type": "Brand", "name": "MadeByMeier"}
+        },
+        {
+          "@type": "Product",
+          "position": 2,
+          "name": "Money Backpack",
+          "alternateName": ["Cash Backpack", "Dollar Backpack"],
+          "image": "https://madebymeier.com/assets/backpack.svg",
+          "url": "https://madebymeier.com/products/money-backpack",
+          "brand": {"@type": "Brand", "name": "MadeByMeier"}
+        }
+      ]
+    }
   }
   </script>
 
