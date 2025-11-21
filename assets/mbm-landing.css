@@ -14,8 +14,7 @@ html {
   height: 100%;
   position: fixed;
   overflow: hidden;
-  touch-action: none;
-  overscroll-behavior: none;
+  touch-action: pan-x pan-y;
 }
 body {
   font-family: Georgia, serif;
@@ -26,7 +25,7 @@ body {
   position: fixed;
   overflow: hidden;
   -webkit-overflow-scrolling: touch;
-  touch-action: none;
+  touch-action: pan-x pan-y;
   user-select: none;
   -webkit-user-select: none;
 }
@@ -41,17 +40,7 @@ body {
   position: relative;
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   gap: 1.5rem;
-}
-/* Full-screen touch capture overlay */
-.touch-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  touch-action: none;
-  pointer-events: auto;
+  touch-action: pan-x pan-y;
 }
 .orbit-stage {
   position: relative;
@@ -60,12 +49,11 @@ body {
   max-width: var(--stage-max);
   max-height: var(--stage-max);
   z-index: 5;
-  touch-action: none;
+  touch-action: pan-x pan-y;
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
   flex-shrink: 0;
-  pointer-events: none;
 }
 .orbit-center {
   position: absolute;
@@ -80,8 +68,6 @@ body {
   z-index: 50;
   cursor: pointer;
   text-decoration: none;
-  touch-action: auto;
-  pointer-events: auto;
 }
 .center-logo {
   width: 100%;
@@ -104,8 +90,6 @@ body {
   -webkit-backface-visibility: hidden;
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
-  touch-action: auto;
-  pointer-events: auto;
 }
 .orbit-item:active {
   cursor: grabbing;
@@ -140,7 +124,6 @@ body {
   gap: 1rem;
   justify-content: center;
   align-items: center;
-  pointer-events: auto;
 }
 .cta-button {
   font-family: Georgia, serif;
@@ -159,8 +142,6 @@ body {
   align-items: center;
   justify-content: center;
   min-width: 180px;
-  touch-action: auto;
-  pointer-events: auto;
 }
 .cta-button--primary {
   background: var(--mbm-ink);
@@ -244,13 +225,15 @@ body {
     font-size: 9px;
   }
 }
+/* Landscape mode - prevent button overlap */
 @media (max-height: 600px) and (orientation: landscape) {
   .page-container {
-    gap: 0.5rem;
+    gap: 0.25rem;
+    padding-bottom: calc(env(safe-area-inset-bottom) + 3.5rem);
   }
   .orbit-stage {
-    width: min(55vw, 85vh);
-    height: min(55vw, 85vh);
+    width: min(45vw, 75vh);
+    height: min(45vw, 75vh);
   }
   
   .orbit-center {
@@ -264,13 +247,36 @@ body {
     height: 28%;
   }
   .bottom-cta {
-    bottom: 1rem;
-    gap: 0.5rem;
+    bottom: 0.5rem;
+    gap: 0.4rem;
+    padding: 0 0.5rem;
   }
   .cta-button {
-    font-size: 11px;
-    padding: 0.5rem 1rem;
-    min-width: 140px;
+    font-size: 9px;
+    padding: 0.4rem 0.6rem;
+    min-width: 0;
+    flex: 1;
+  }
+  .cta-text {
+    font-size: 8px;
+  }
+}
+/* Extra short landscape screens */
+@media (max-height: 500px) and (orientation: landscape) {
+  .orbit-stage {
+    width: min(40vw, 70vh);
+    height: min(40vw, 70vh);
+  }
+  .bottom-cta {
+    bottom: 0.25rem;
+    gap: 0.3rem;
+  }
+  .cta-button {
+    font-size: 8px;
+    padding: 0.3rem 0.5rem;
+  }
+  .cta-text {
+    font-size: 7px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
