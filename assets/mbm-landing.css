@@ -38,6 +38,9 @@ body {
   height: 100%;
   object-fit: cover;
   z-index: -2;
+  pointer-events: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 /* Optional: Overlay for better contrast */
@@ -314,8 +317,13 @@ body::before {
     transition: none !important;
   }
   
-  #bg-video {
-    display: none;
+
+  #bg-video::-webkit-media-controls {
+    display: none !important;
+  }
+
+  #bg-video::-webkit-media-controls-enclosure {
+    display: none !important;
   }
   
   body {
